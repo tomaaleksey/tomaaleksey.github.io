@@ -577,7 +577,14 @@ h2.sec-title { font-size:clamp(30px,4vw,46px); margin-bottom:var(--s4); }
 .phone__top .av svg { width:15px; height:15px; color:#fff; }
 .phone__top b { display:block; font-family:var(--font-display); font-size:13px; color:#fff; }
 .phone__top span { font-size:10.5px; color:var(--ok-soft); }
-.phone__msgs { flex:1; padding:var(--s4); display:flex; flex-direction:column; gap:9px; overflow:hidden; }
+.phone__msgs { flex:1; padding:var(--s4); display:flex; flex-direction:column; gap:9px;
+  overflow-y:auto; overscroll-behavior:contain; scroll-behavior:smooth; }
+/* тонкая полоса прокрутки — подсказка, что переписку можно листать */
+.phone__msgs::-webkit-scrollbar, .chatapp__msgs::-webkit-scrollbar { width:6px; }
+.phone__msgs::-webkit-scrollbar-thumb, .chatapp__msgs::-webkit-scrollbar-thumb {
+  background:rgba(255,255,255,.16); border-radius:3px; }
+.phone__msgs::-webkit-scrollbar-track, .chatapp__msgs::-webkit-scrollbar-track { background:transparent; }
+.chatapp__msgs { overscroll-behavior:contain; }
 .phone__msgs .msg { max-width:82%; font-size:12.5px; padding:9px 12px; }
 .quick { display:flex; flex-wrap:wrap; gap:6px; align-self:flex-end; max-width:88%; opacity:0; transform:translateY(10px); }
 .quick.show { animation:msgIn .45s var(--ease) forwards; }
@@ -3492,9 +3499,10 @@ window.tomixSendLead = function (lead) {
         if (inView(el)) el.classList.add("rv-on");
       });
 
-      document.querySelectorAll(".msg:not(.show)").forEach(function (el) {
-        if (!el.classList.contains("typing") && inView(el)) el.classList.add("show");
-      });
+      /* Сообщения в демонстрациях не трогаем: ими управляет сценарий,
+         который показывает их по очереди с задержками. Раньше эта
+         страховка выводила всю переписку разом, и разговор переставал
+         читаться как разговор. */
       document.querySelectorAll(".panel.is-on:not(.is-live)").forEach(function (el) {
         if (inView(el)) el.classList.add("is-live");
       });
@@ -3658,6 +3666,20 @@ window.tomixSendLead = function (lead) {
     container._timers = (container._timers || []);
     container._timers.forEach(clearTimeout);
     container._timers = [];
+    /* Пока человек не листал сам, держим переписку у последнего
+       сообщения. Как только он отлистал вверх читать начало —
+       перестаём дёргать, и возвращаемся, только если он сам
+       вернулся вниз. */
+    if (!container._pinInit) {
+      container._pinInit = true;
+      container.addEventListener("scroll", function () {
+        container._pinned =
+          container.scrollHeight - container.scrollTop - container.clientHeight < 36;
+      }, { passive: true });
+    }
+    container._pinned = true;
+    container.scrollTop = 0;
+
     items.forEach(function (el) {
       var d = parseInt(el.dataset.d || "0", 10);
       container._timers.push(setTimeout(function () {
@@ -3666,7 +3688,7 @@ window.tomixSendLead = function (lead) {
         if (el.classList.contains("typing")) {
           container._timers.push(setTimeout(function () { el.classList.remove("show"); }, 1000));
         }
-        container.scrollTop = container.scrollHeight;
+        if (container._pinned) container.scrollTop = container.scrollHeight;
       }, d));
     });
   }
