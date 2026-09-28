@@ -496,9 +496,15 @@ h2.sec-title { font-size:clamp(30px,4vw,46px); margin-bottom:var(--s4); }
 .chatapp__send { width:34px; height:34px; border-radius:50%; background:var(--sky); display:grid; place-items:center; flex-shrink:0; }
 .chatapp__send svg { width:15px; height:15px; color:#fff; }
 
-.chatapp__card { border-left:1px solid var(--dark-line); padding:var(--s5) var(--s4); }
+/* min-height:0 и прокрутка — чтобы длинная подпись не выдавливала
+   карточку за пределы окна и её не срезала рамка браузера */
+.chatapp__card { border-left:1px solid var(--dark-line); padding:var(--s5) var(--s4);
+  min-height:0; overflow-y:auto; overscroll-behavior:contain; }
+.chatapp__card::-webkit-scrollbar { width:6px; }
+.chatapp__card::-webkit-scrollbar-thumb { background:rgba(255,255,255,.16); border-radius:3px; }
+.chatapp__card::-webkit-scrollbar-track { background:transparent; }
 .chatapp__card h4 { font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--dark-muted); margin-bottom:var(--s4); }
-.crm-row { padding-block:9px; border-bottom:1px solid rgba(255,255,255,.055); }
+.crm-row { padding-block:7px; border-bottom:1px solid rgba(255,255,255,.055); }
 .crm-row small { display:block; font-size:10.5px; color:var(--dark-muted); }
 .crm-row b { font-size:13px; color:#E7EEF6; font-family:var(--font-display); }
 .crm-row b.acc { color:var(--ok-soft); }
@@ -2562,7 +2568,7 @@ window.tomixSendLead = function (lead) {
               <h4>Карточка клиента</h4>
               <div class="crm-row"><small>Клиент</small><b>Сергей Морозов</b></div>
               <div class="crm-row"><small>Источник</small><b>WhatsApp · Сайт</b></div>
-              <div class="crm-row"><small>Запрос</small><b>Сопровождение сделки, вторичка</b></div>
+              <div class="crm-row"><small>Запрос</small><b>Сопровождение сделки</b></div>
               <div class="crm-row"><small>Сумма сделки</small><b class="acc">45 000 ₽</b></div>
               <div class="crm-row"><small>Этап</small><b>Консультация назначена</b></div>
               <span class="crm-badge"><span class="dot" aria-hidden="true"></span>Сделка создана в Bitrix24</span>
