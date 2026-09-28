@@ -469,7 +469,11 @@ h2.sec-title { font-size:clamp(30px,4vw,46px); margin-bottom:var(--s4); }
 .dlg__meta small { display:block; font-size:10px; color:#6B7A8D; }
 .dlg__meta i { display:inline-grid; place-items:center; min-width:17px; height:17px; padding:0 4px; margin-top:3px; border-radius:var(--r-pill); background:var(--sky); color:#fff; font-style:normal; font-size:10px; font-weight:700; }
 
-.chatapp__main { display:flex; flex-direction:column; min-width:0; }
+/* min-height:0 обязателен: без него колонка растягивается под высоту
+   переписки, прокрутка внутри не включается, и нижние сообщения просто
+   обрезаются рамкой окна. */
+.chatapp__main { display:flex; flex-direction:column; min-width:0; min-height:0; }
+.chatapp__side { min-height:0; }
 .chatapp__top { padding:11px var(--s5); border-bottom:1px solid var(--dark-line); display:flex; align-items:center; gap:11px; }
 .chatapp__top b { font-family:var(--font-display); font-size:14px; color:#fff; }
 .chatapp__top .src { font-size:11px; color:var(--dark-muted); }
