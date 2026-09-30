@@ -2207,7 +2207,7 @@ input[type="range"].leak__range:focus-visible { outline:3px solid var(--sky); ou
    ========================================================================== */
 /* Растушёвка должна остаться ниже отступа секции (около 80 px), иначе
    заголовок окажется на посветлевшем крае и перестанет читаться. */
-:root { --seam: clamp(64px, 8vw, 110px); }
+:root { --seam: clamp(96px, 12vw, 190px); }
 
 /* низ бегущей строки → светлая сцена с руками */
 /* У бегущей строки растушёвки нет намеренно: сразу под ней начинается
@@ -2250,6 +2250,72 @@ input[type="range"].leak__range:focus-visible { outline:3px solid var(--sky); ou
     var(--dark-bg);
 }
 
+
+/* Тот же переход, но разложенный по кривой: ступени от линейного
+   градиента перестают быть заметны. color-mix есть не везде, поэтому
+   правила лежат в @supports — без него остаётся простой вариант выше. */
+@supports (background: linear-gradient(red, color-mix(in srgb, red 50%, blue))) {
+  .work {
+    background:
+      linear-gradient(180deg,
+        var(--page-bg) 0%,
+        color-mix(in srgb, var(--page-bg) 82%, var(--dark-bg)) 14%,
+        color-mix(in srgb, var(--page-bg) 55%, var(--dark-bg)) 34%,
+        color-mix(in srgb, var(--page-bg) 28%, var(--dark-bg)) 56%,
+        color-mix(in srgb, var(--page-bg) 10%, var(--dark-bg)) 76%,
+        var(--dark-bg) 100%) top / 100% var(--seam) no-repeat,
+      var(--dark-bg);
+  }
+  .ai {
+    background:
+      linear-gradient(0deg,
+        var(--bg-sunken) 0%,
+        color-mix(in srgb, var(--bg-sunken) 82%, var(--dark-bg)) 14%,
+        color-mix(in srgb, var(--bg-sunken) 55%, var(--dark-bg)) 34%,
+        color-mix(in srgb, var(--bg-sunken) 28%, var(--dark-bg)) 56%,
+        color-mix(in srgb, var(--bg-sunken) 10%, var(--dark-bg)) 76%,
+        var(--dark-bg) 100%) bottom / 100% var(--seam) no-repeat,
+      var(--dark-bg);
+  }
+  .cases-sec, .leak {
+    background:
+      linear-gradient(180deg,
+        var(--page-bg) 0%,
+        color-mix(in srgb, var(--page-bg) 82%, var(--dark-bg)) 14%,
+        color-mix(in srgb, var(--page-bg) 55%, var(--dark-bg)) 34%,
+        color-mix(in srgb, var(--page-bg) 28%, var(--dark-bg)) 56%,
+        color-mix(in srgb, var(--page-bg) 10%, var(--dark-bg)) 76%,
+        var(--dark-bg) 100%) top / 100% var(--seam) no-repeat,
+      linear-gradient(0deg,
+        var(--page-bg) 0%,
+        color-mix(in srgb, var(--page-bg) 82%, var(--dark-bg)) 14%,
+        color-mix(in srgb, var(--page-bg) 55%, var(--dark-bg)) 34%,
+        color-mix(in srgb, var(--page-bg) 28%, var(--dark-bg)) 56%,
+        color-mix(in srgb, var(--page-bg) 10%, var(--dark-bg)) 76%,
+        var(--dark-bg) 100%) bottom / 100% var(--seam) no-repeat,
+      var(--dark-bg);
+  }
+  .contact {
+    background:
+      linear-gradient(180deg,
+        var(--bg-sunken) 0%,
+        color-mix(in srgb, var(--bg-sunken) 82%, var(--dark-bg)) 14%,
+        color-mix(in srgb, var(--bg-sunken) 55%, var(--dark-bg)) 34%,
+        color-mix(in srgb, var(--bg-sunken) 28%, var(--dark-bg)) 56%,
+        color-mix(in srgb, var(--bg-sunken) 10%, var(--dark-bg)) 76%,
+        var(--dark-bg) 100%) top / 100% var(--seam) no-repeat,
+      var(--dark-bg);
+  }
+  .hx::after {
+    background: linear-gradient(0deg,
+      #070B12 0%,
+      color-mix(in srgb, #070B12 82%, #F4F8FC) 14%,
+      color-mix(in srgb, #070B12 55%, #F4F8FC) 34%,
+      color-mix(in srgb, #070B12 28%, #F4F8FC) 56%,
+      color-mix(in srgb, #070B12 10%, #F4F8FC) 76%,
+      #F4F8FC 100%);
+  }
+}
 </style>
 </head>
 <body>
@@ -4688,7 +4754,7 @@ window.tomixSendLead = function (lead) {
 
   var N=60, DIR='caps/';
   var ctx=cv.getContext('2d');
-  var frames=new Array(N), idx=0, drawn=-1, started=false, live=false;
+  var frames=new Array(N), idx=0, drawn=-1, blend=0, drawnBlend=-1, started=false, live=false;
   var dpr=Math.min(devicePixelRatio||1,2);
 
   function size(){
@@ -4711,18 +4777,28 @@ window.tomixSendLead = function (lead) {
     return null;
   }
 
+  /* Кадров всего шесть десятков, и при прокрутке они сменялись скачком.
+     Подмешиваем следующий кадр пропорционально дробной части — движение
+     становится непрерывным без добавления новых картинок. */
+  function put(img, W, H){
+    var iw=img.naturalWidth, ih=img.naturalHeight;
+    var sc=Math.max(W/iw,H/ih), w=iw*sc, h=ih*sc;
+    ctx.drawImage(img,(W-w)/2,(H-h)/2,w,h);
+  }
+
   function draw(){
     var img=pick(idx); if(!img) return;
     var W=cv.width,H=cv.height; if(!W||!H) return;
-    var iw=img.naturalWidth, ih=img.naturalHeight;
-    var sc=Math.max(W/iw,H/ih);
-    var w=iw*sc, h=ih*sc;
     ctx.setTransform(1,0,0,1,0,0);
     ctx.globalCompositeOperation='source-over';
     ctx.globalAlpha=1;
     ctx.clearRect(0,0,W,H);
-    ctx.drawImage(img,(W-w)/2,(H-h)/2,w,h);
-    drawn=idx;
+    put(img, W, H);
+    if(blend>0.02 && idx+1<N){
+      var nxt=pick(idx+1);
+      if(nxt && nxt!==img){ ctx.globalAlpha=blend; put(nxt, W, H); ctx.globalAlpha=1; }
+    }
+    drawn=idx; drawnBlend=blend;
   }
 
   /* раскадровка сценария */
@@ -4747,9 +4823,12 @@ window.tomixSendLead = function (lead) {
 
     if(p>0.63) countUp();
 
-    var want=Math.round(frameAt(p));
-    want=want<0?0:want>N-1?N-1:want;
-    if(want!==idx){ idx=want; draw(); } else if(drawn!==idx) draw();
+    var exact=frameAt(p);
+    exact=exact<0?0:exact>N-1?N-1:exact;
+    var want=Math.floor(exact), f=exact-want;
+    if(want!==idx || Math.abs(f-blend)>0.05 || drawn!==idx){
+      idx=want; blend=f; draw();
+    }
 
   }
   function preload(){
@@ -4836,7 +4915,7 @@ window.tomixSendLead = function (lead) {
   var ctx = cv.getContext("2d", { alpha: false });
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  var frames = new Array(N), decoded = 0;
+  var frames = new Array(N), decoded = 0, blend = 0;
   var idx = 0, drawnIdx = -1;
   var live = false, started = false;
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -4885,6 +4964,18 @@ window.tomixSendLead = function (lead) {
     ctx.fillRect(0, 0, cw, ch);
     ctx.drawImage(img, x, y, w, h);
 
+    /* Подмешиваем следующий кадр по дробной части прогресса: руки
+       движутся непрерывно, а не переключаются рывками. */
+    if (blend > 0.02 && idx + 1 < N) {
+      var nxt = pick(idx + 1);
+      if (nxt && nxt !== img) {
+        ctx.globalAlpha = blend;
+        ctx.drawImage(nxt, x, (ch - nxt.naturalHeight * (cw / nxt.naturalWidth)) / 2,
+                      cw, nxt.naturalHeight * (cw / nxt.naturalWidth));
+        ctx.globalAlpha = 1;
+      }
+    }
+
     /* Блик на кончиках пальцев. Координаты берём в системе кадра,
        поэтому он держится на месте при любом наезде и размере.   */
     var t = idx / (N - 1);
@@ -4927,9 +5018,11 @@ window.tomixSendLead = function (lead) {
     k = k < 0 ? 0 : k > 1 ? 1 : k;
     sec.style.setProperty("--k", k.toFixed(4));
 
-    var want = Math.round(k * (N - 1));
-    if (want !== idx) { idx = want; draw(); }
-    else if (drawnIdx !== idx) draw();
+    var exact = k * (N - 1);
+    var want = Math.floor(exact), f = exact - want;
+    if (want !== idx || Math.abs(f - blend) > 0.05 || drawnIdx !== idx) {
+      idx = want; blend = f; draw();
+    }
   }
 
   /* Пока не готовы ВСЕ кадры, перемотку не включаем: наполовину
