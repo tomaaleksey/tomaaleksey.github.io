@@ -1752,7 +1752,7 @@ h2.sec-title { font-size:clamp(34px,4.6vw,54px); }
    повторить, а это ровно то, что нам нужно перед рассказом о системе.
    ========================================================================== */
 .hx {
-  position:relative; height:370svh;
+  position:relative; height:230svh;
   background:#F4F8FC;
   --p:0; --k:0;
 }
@@ -1808,7 +1808,7 @@ h2.sec-title { font-size:clamp(34px,4.6vw,54px); }
 }
 
 @media (max-width:640px) {
-  .hx { height:330svh; }
+  .hx { height:210svh; }
   .hx__kicker { font-size:15px; letter-spacing:.08em; top:clamp(40px,8vh,74px); }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1823,7 +1823,7 @@ h2.sec-title { font-size:clamp(34px,4.6vw,54px); }
    текст остаётся векторным и чётким, а содержимое можно править, не
    трогая ролик.
    ========================================================================== */
-.caps{position:relative;height:330svh;--p:0;background:#070B12}
+.caps{position:relative;height:220svh;--p:0;background:#070B12}
 .caps__stage{position:sticky;top:0;height:100svh;overflow:hidden;
   background:#080B11}
 
@@ -2207,49 +2207,46 @@ input[type="range"].leak__range:focus-visible { outline:3px solid var(--sky); ou
    ========================================================================== */
 /* Растушёвка должна остаться ниже отступа секции (около 80 px), иначе
    заголовок окажется на посветлевшем крае и перестанет читаться. */
-:root { --seam: clamp(40px, 5vw, 72px); }
+:root { --seam: clamp(64px, 8vw, 110px); }
 
 /* низ бегущей строки → светлая сцена с руками */
-.marquee {
-  background:
-    linear-gradient(0deg, var(--bg-sunken), transparent 44px),
-    var(--dark-bg);
-}
+/* У бегущей строки растушёвки нет намеренно: сразу под ней начинается
+   светлая сцена с руками, и мягкий край выглядел как грязная полоса. */
 /* низ сцены с руками → тёмная капсула */
 .hx::after {
   content:""; position:absolute; left:0; right:0; bottom:0; height:var(--seam);
-  background:linear-gradient(0deg, #070B12, transparent); pointer-events:none; z-index:4;
+  background:linear-gradient(0deg, #070B12 0, #F4F8FC 100%); pointer-events:none; z-index:4;
 }
 /* верх «примеров в работе» → белый блок услуг */
 .work {
   background:
-    linear-gradient(180deg, var(--page-bg), transparent var(--seam)),
+    linear-gradient(180deg, var(--page-bg) 0, var(--dark-bg) var(--seam)),
     var(--dark-bg);
 }
 /* низ блока про ИИ → светлые интеграции */
 .ai {
   background:
-    linear-gradient(0deg, var(--bg-sunken), transparent var(--seam)),
+    linear-gradient(0deg, var(--bg-sunken) 0, var(--dark-bg) var(--seam)),
     var(--dark-bg);
 }
 /* кейсы: сверху процесс, снизу стоимость — оба белые */
 .cases-sec {
   background:
-    linear-gradient(180deg, var(--page-bg), transparent var(--seam)),
-    linear-gradient(0deg, var(--page-bg), transparent var(--seam)),
+    linear-gradient(180deg, var(--page-bg) 0, var(--dark-bg) var(--seam)) top / 100% var(--seam) no-repeat,
+    linear-gradient(0deg, var(--page-bg) 0, var(--dark-bg) var(--seam)) bottom / 100% var(--seam) no-repeat,
     var(--dark-bg);
 }
 /* калькулятор потерь: сверху стоимость, снизу блок ситуаций */
 .leak {
   background:
-    linear-gradient(180deg, var(--page-bg), transparent var(--seam)),
-    linear-gradient(0deg, var(--page-bg), transparent var(--seam)),
+    linear-gradient(180deg, var(--page-bg) 0, var(--dark-bg) var(--seam)) top / 100% var(--seam) no-repeat,
+    linear-gradient(0deg, var(--page-bg) 0, var(--dark-bg) var(--seam)) bottom / 100% var(--seam) no-repeat,
     var(--dark-bg);
 }
 /* верх контактов → светлый блок с демонстрацией */
 .contact {
   background:
-    linear-gradient(180deg, var(--bg-sunken), transparent var(--seam)),
+    linear-gradient(180deg, var(--bg-sunken) 0, var(--dark-bg) var(--seam)),
     var(--dark-bg);
 }
 
