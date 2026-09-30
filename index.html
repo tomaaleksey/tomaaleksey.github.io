@@ -2207,7 +2207,7 @@ input[type="range"].leak__range:focus-visible { outline:3px solid var(--sky); ou
    ========================================================================== */
 /* Растушёвка должна остаться ниже отступа секции (около 80 px), иначе
    заголовок окажется на посветлевшем крае и перестанет читаться. */
-:root { --seam: clamp(96px, 12vw, 190px); }
+:root { --seam: clamp(110px, 13vw, 200px); }
 
 /* низ бегущей строки → светлая сцена с руками */
 /* У бегущей строки растушёвки нет намеренно: сразу под ней начинается
@@ -2251,18 +2251,25 @@ input[type="range"].leak__range:focus-visible { outline:3px solid var(--sky); ou
 }
 
 
-/* Тот же переход, но разложенный по кривой: ступени от линейного
-   градиента перестают быть заметны. color-mix есть не везде, поэтому
-   правила лежат в @supports — без него остаётся простой вариант выше. */
+
+/* Тот же переход, но разложенный по S-образной кривой: у самых краёв
+   цвет почти не меняется, поэтому не видно, где растушёвка начинается
+   и где заканчивается. color-mix есть не везде — правила лежат в
+   @supports, без него остаётся простой вариант выше. */
 @supports (background: linear-gradient(red, color-mix(in srgb, red 50%, blue))) {
   .work {
     background:
       linear-gradient(180deg,
         var(--page-bg) 0%,
-        color-mix(in srgb, var(--page-bg) 82%, var(--dark-bg)) 14%,
-        color-mix(in srgb, var(--page-bg) 55%, var(--dark-bg)) 34%,
-        color-mix(in srgb, var(--page-bg) 28%, var(--dark-bg)) 56%,
-        color-mix(in srgb, var(--page-bg) 10%, var(--dark-bg)) 76%,
+        color-mix(in srgb, var(--page-bg) 97%, var(--dark-bg)) 10%,
+        color-mix(in srgb, var(--page-bg) 90%, var(--dark-bg)) 20%,
+        color-mix(in srgb, var(--page-bg) 78%, var(--dark-bg)) 30%,
+        color-mix(in srgb, var(--page-bg) 65%, var(--dark-bg)) 40%,
+        color-mix(in srgb, var(--page-bg) 50%, var(--dark-bg)) 50%,
+        color-mix(in srgb, var(--page-bg) 35%, var(--dark-bg)) 60%,
+        color-mix(in srgb, var(--page-bg) 22%, var(--dark-bg)) 70%,
+        color-mix(in srgb, var(--page-bg) 10%, var(--dark-bg)) 80%,
+        color-mix(in srgb, var(--page-bg) 3%, var(--dark-bg)) 90%,
         var(--dark-bg) 100%) top / 100% var(--seam) no-repeat,
       var(--dark-bg);
   }
@@ -2270,10 +2277,15 @@ input[type="range"].leak__range:focus-visible { outline:3px solid var(--sky); ou
     background:
       linear-gradient(0deg,
         var(--bg-sunken) 0%,
-        color-mix(in srgb, var(--bg-sunken) 82%, var(--dark-bg)) 14%,
-        color-mix(in srgb, var(--bg-sunken) 55%, var(--dark-bg)) 34%,
-        color-mix(in srgb, var(--bg-sunken) 28%, var(--dark-bg)) 56%,
-        color-mix(in srgb, var(--bg-sunken) 10%, var(--dark-bg)) 76%,
+        color-mix(in srgb, var(--bg-sunken) 97%, var(--dark-bg)) 10%,
+        color-mix(in srgb, var(--bg-sunken) 90%, var(--dark-bg)) 20%,
+        color-mix(in srgb, var(--bg-sunken) 78%, var(--dark-bg)) 30%,
+        color-mix(in srgb, var(--bg-sunken) 65%, var(--dark-bg)) 40%,
+        color-mix(in srgb, var(--bg-sunken) 50%, var(--dark-bg)) 50%,
+        color-mix(in srgb, var(--bg-sunken) 35%, var(--dark-bg)) 60%,
+        color-mix(in srgb, var(--bg-sunken) 22%, var(--dark-bg)) 70%,
+        color-mix(in srgb, var(--bg-sunken) 10%, var(--dark-bg)) 80%,
+        color-mix(in srgb, var(--bg-sunken) 3%, var(--dark-bg)) 90%,
         var(--dark-bg) 100%) bottom / 100% var(--seam) no-repeat,
       var(--dark-bg);
   }
@@ -2281,17 +2293,27 @@ input[type="range"].leak__range:focus-visible { outline:3px solid var(--sky); ou
     background:
       linear-gradient(180deg,
         var(--page-bg) 0%,
-        color-mix(in srgb, var(--page-bg) 82%, var(--dark-bg)) 14%,
-        color-mix(in srgb, var(--page-bg) 55%, var(--dark-bg)) 34%,
-        color-mix(in srgb, var(--page-bg) 28%, var(--dark-bg)) 56%,
-        color-mix(in srgb, var(--page-bg) 10%, var(--dark-bg)) 76%,
+        color-mix(in srgb, var(--page-bg) 97%, var(--dark-bg)) 10%,
+        color-mix(in srgb, var(--page-bg) 90%, var(--dark-bg)) 20%,
+        color-mix(in srgb, var(--page-bg) 78%, var(--dark-bg)) 30%,
+        color-mix(in srgb, var(--page-bg) 65%, var(--dark-bg)) 40%,
+        color-mix(in srgb, var(--page-bg) 50%, var(--dark-bg)) 50%,
+        color-mix(in srgb, var(--page-bg) 35%, var(--dark-bg)) 60%,
+        color-mix(in srgb, var(--page-bg) 22%, var(--dark-bg)) 70%,
+        color-mix(in srgb, var(--page-bg) 10%, var(--dark-bg)) 80%,
+        color-mix(in srgb, var(--page-bg) 3%, var(--dark-bg)) 90%,
         var(--dark-bg) 100%) top / 100% var(--seam) no-repeat,
       linear-gradient(0deg,
         var(--page-bg) 0%,
-        color-mix(in srgb, var(--page-bg) 82%, var(--dark-bg)) 14%,
-        color-mix(in srgb, var(--page-bg) 55%, var(--dark-bg)) 34%,
-        color-mix(in srgb, var(--page-bg) 28%, var(--dark-bg)) 56%,
-        color-mix(in srgb, var(--page-bg) 10%, var(--dark-bg)) 76%,
+        color-mix(in srgb, var(--page-bg) 97%, var(--dark-bg)) 10%,
+        color-mix(in srgb, var(--page-bg) 90%, var(--dark-bg)) 20%,
+        color-mix(in srgb, var(--page-bg) 78%, var(--dark-bg)) 30%,
+        color-mix(in srgb, var(--page-bg) 65%, var(--dark-bg)) 40%,
+        color-mix(in srgb, var(--page-bg) 50%, var(--dark-bg)) 50%,
+        color-mix(in srgb, var(--page-bg) 35%, var(--dark-bg)) 60%,
+        color-mix(in srgb, var(--page-bg) 22%, var(--dark-bg)) 70%,
+        color-mix(in srgb, var(--page-bg) 10%, var(--dark-bg)) 80%,
+        color-mix(in srgb, var(--page-bg) 3%, var(--dark-bg)) 90%,
         var(--dark-bg) 100%) bottom / 100% var(--seam) no-repeat,
       var(--dark-bg);
   }
@@ -2299,23 +2321,37 @@ input[type="range"].leak__range:focus-visible { outline:3px solid var(--sky); ou
     background:
       linear-gradient(180deg,
         var(--bg-sunken) 0%,
-        color-mix(in srgb, var(--bg-sunken) 82%, var(--dark-bg)) 14%,
-        color-mix(in srgb, var(--bg-sunken) 55%, var(--dark-bg)) 34%,
-        color-mix(in srgb, var(--bg-sunken) 28%, var(--dark-bg)) 56%,
-        color-mix(in srgb, var(--bg-sunken) 10%, var(--dark-bg)) 76%,
+        color-mix(in srgb, var(--bg-sunken) 97%, var(--dark-bg)) 10%,
+        color-mix(in srgb, var(--bg-sunken) 90%, var(--dark-bg)) 20%,
+        color-mix(in srgb, var(--bg-sunken) 78%, var(--dark-bg)) 30%,
+        color-mix(in srgb, var(--bg-sunken) 65%, var(--dark-bg)) 40%,
+        color-mix(in srgb, var(--bg-sunken) 50%, var(--dark-bg)) 50%,
+        color-mix(in srgb, var(--bg-sunken) 35%, var(--dark-bg)) 60%,
+        color-mix(in srgb, var(--bg-sunken) 22%, var(--dark-bg)) 70%,
+        color-mix(in srgb, var(--bg-sunken) 10%, var(--dark-bg)) 80%,
+        color-mix(in srgb, var(--bg-sunken) 3%, var(--dark-bg)) 90%,
         var(--dark-bg) 100%) top / 100% var(--seam) no-repeat,
       var(--dark-bg);
   }
-  .hx::after {
-    background: linear-gradient(0deg,
-      #070B12 0%,
-      color-mix(in srgb, #070B12 82%, #F4F8FC) 14%,
-      color-mix(in srgb, #070B12 55%, #F4F8FC) 34%,
-      color-mix(in srgb, #070B12 28%, #F4F8FC) 56%,
-      color-mix(in srgb, #070B12 10%, #F4F8FC) 76%,
-      #F4F8FC 100%);
-  }
+  .hx::after { background: linear-gradient(0deg,
+        #070B12 0%,
+        color-mix(in srgb, #070B12 97%, #F4F8FC) 10%,
+        color-mix(in srgb, #070B12 90%, #F4F8FC) 20%,
+        color-mix(in srgb, #070B12 78%, #F4F8FC) 30%,
+        color-mix(in srgb, #070B12 65%, #F4F8FC) 40%,
+        color-mix(in srgb, #070B12 50%, #F4F8FC) 50%,
+        color-mix(in srgb, #070B12 35%, #F4F8FC) 60%,
+        color-mix(in srgb, #070B12 22%, #F4F8FC) 70%,
+        color-mix(in srgb, #070B12 10%, #F4F8FC) 80%,
+        color-mix(in srgb, #070B12 3%, #F4F8FC) 90%,
+        #F4F8FC 100%); }
 }
+
+/* Растушёвка длинная, поэтому тёмным секциям добавляем воздуха сверху и
+   снизу: заголовок должен начинаться там, где переход уже завершился,
+   иначе светлый текст окажется на посветлевшем фоне. */
+.work, .cases-sec, .leak, .contact { padding-top: calc(var(--s9) + var(--seam) * 0.5); }
+.ai, .cases-sec, .leak { padding-bottom: calc(var(--s9) + var(--seam) * 0.5); }
 </style>
 </head>
 <body>
