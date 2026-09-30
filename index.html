@@ -1823,7 +1823,7 @@ h2.sec-title { font-size:clamp(34px,4.6vw,54px); }
    текст остаётся векторным и чётким, а содержимое можно править, не
    трогая ролик.
    ========================================================================== */
-.caps{position:relative;height:220svh;--p:0;background:#070B12}
+.caps{position:relative;height:250svh;--p:0;background:#070B12}
 .caps__stage{position:sticky;top:0;height:100svh;overflow:hidden;
   background:#080B11}
 
@@ -1881,16 +1881,16 @@ h2.sec-title { font-size:clamp(34px,4.6vw,54px); }
    фоном — ощущение, что информация идёт изнутри машины.            */
 .caps__scrim{position:absolute;inset:0;z-index:3;pointer-events:none;
   background:radial-gradient(90% 70% at 50% 50%, rgba(7,11,18,.72), rgba(7,11,18,.90) 66%, #070B12);
-  opacity: calc(min(1, max(0, var(--p) - 0.60) * 9));}
+  opacity: calc(min(1, max(0, var(--p) - 0.50) * 4));}
 
 .caps__stats{
   position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
   z-index:4;width:min(1120px,90vw);
   display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,3vw,44px);
   text-align:center;pointer-events:none;
-  opacity: calc(min(1, max(0, var(--p) - 0.64) * 8));
+  opacity: calc(min(1, max(0, var(--p) - 0.56) * 3.4));
 }
-.cs{transform:translateY(calc((1 - min(1, max(0, var(--p) - 0.64) * 8)) * 28px));}
+.cs{transform:translateY(calc((1 - min(1, max(0, var(--p) - 0.56) * 3.4)) * 28px));}
 .cs b{display:block;font-family:var(--font-display);font-weight:800;
   font-size:clamp(40px,6vw,78px);letter-spacing:-.045em;line-height:1;color:#fff;
   font-variant-numeric:tabular-nums;text-shadow:0 4px 30px rgba(4,9,16,.9)}
@@ -4842,9 +4842,11 @@ window.tomixSendLead = function (lead) {
     /* 0-36 %   подлёт, дверь раскрывается, бьёт пар  → кадры 0-42
        36-82 %  камера заходит внутрь, идёт к ядру     → кадры 42-59
        82-100 % назад: капсула закрывается             → кадры 59-6   */
-    /* 0-62 %   весь ролик: облёт, двери, дым, заход внутрь → кадры 0-59
-       62-100 % камера уже внутри, кадр держится, идут цифры → кадр 59 */
-    if(p<=0.62) return (p/0.62)*59;
+    /* 0-52 %   весь ролик: облёт, двери, дым, заход внутрь → кадры 0-59
+       52-100 % камера уже внутри, кадр держится, идут цифры → кадр 59
+       Почти половина прокрутки отдана цифрам: иначе блок выскакивает
+       за мгновение и счёт цифр никто не успевает увидеть. */
+    if(p<=0.52) return (p/0.52)*59;
     return 59;
   }
 
@@ -4857,7 +4859,7 @@ window.tomixSendLead = function (lead) {
     p=p<0?0:p>1?1:p;
     sec.style.setProperty('--p',p.toFixed(4));
 
-    if(p>0.63) countUp();
+    if(p>0.55) countUp();
 
     var exact=frameAt(p);
     exact=exact<0?0:exact>N-1?N-1:exact;
@@ -4897,7 +4899,7 @@ window.tomixSendLead = function (lead) {
     nums.forEach(function(el){
       var to=parseFloat(el.getAttribute('data-cs'))||0, t0=performance.now();
       (function step(now){
-        var k=Math.min(1,(now-t0)/900);
+        var k=Math.min(1,(now-t0)/1300);
         el.textContent=Math.round(to*(k*(2-k)));
         if(k<1) requestAnimationFrame(step);
       })(t0);
