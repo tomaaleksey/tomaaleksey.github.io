@@ -2187,6 +2187,62 @@ input[type="range"].leak__range:focus-visible { outline:3px solid var(--sky); ou
 .consent__policy a { color:var(--sky-soft); text-decoration:underline; text-underline-offset:3px; }
 .consent__policy a:hover { color:#fff; }
 
+/* ==========================================================================
+   СТЫКИ СЕКЦИЙ
+   Тёмные и светлые блоки чередуются, и на границе получался резкий обрыв.
+   Растушёвываем края самих секций: верх и низ тёмного блока уходят в цвет
+   соседа. Делаем это фоном, а не отдельными элементами, — так ничего не
+   сдвигается и не появляется лишних полос. Цвета берём из токенов, поэтому
+   в тёмной теме переход тоже остаётся правильным.
+   ========================================================================== */
+/* Растушёвка должна остаться ниже отступа секции (около 80 px), иначе
+   заголовок окажется на посветлевшем крае и перестанет читаться. */
+:root { --seam: clamp(40px, 5vw, 72px); }
+
+/* низ бегущей строки → светлая сцена с руками */
+.marquee {
+  background:
+    linear-gradient(0deg, var(--bg-sunken), transparent 44px),
+    var(--dark-bg);
+}
+/* низ сцены с руками → тёмная капсула */
+.hx::after {
+  content:""; position:absolute; left:0; right:0; bottom:0; height:var(--seam);
+  background:linear-gradient(0deg, #070B12, transparent); pointer-events:none; z-index:4;
+}
+/* верх «примеров в работе» → белый блок услуг */
+.work {
+  background:
+    linear-gradient(180deg, var(--page-bg), transparent var(--seam)),
+    var(--dark-bg);
+}
+/* низ блока про ИИ → светлые интеграции */
+.ai {
+  background:
+    linear-gradient(0deg, var(--bg-sunken), transparent var(--seam)),
+    var(--dark-bg);
+}
+/* кейсы: сверху процесс, снизу стоимость — оба белые */
+.cases-sec {
+  background:
+    linear-gradient(180deg, var(--page-bg), transparent var(--seam)),
+    linear-gradient(0deg, var(--page-bg), transparent var(--seam)),
+    var(--dark-bg);
+}
+/* калькулятор потерь: сверху стоимость, снизу блок ситуаций */
+.leak {
+  background:
+    linear-gradient(180deg, var(--page-bg), transparent var(--seam)),
+    linear-gradient(0deg, var(--page-bg), transparent var(--seam)),
+    var(--dark-bg);
+}
+/* верх контактов → светлый блок с демонстрацией */
+.contact {
+  background:
+    linear-gradient(180deg, var(--bg-sunken), transparent var(--seam)),
+    var(--dark-bg);
+}
+
 </style>
 </head>
 <body>
