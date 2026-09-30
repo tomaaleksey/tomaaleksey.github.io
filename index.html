@@ -4859,7 +4859,7 @@ window.tomixSendLead = function (lead) {
     p=p<0?0:p>1?1:p;
     sec.style.setProperty('--p',p.toFixed(4));
 
-    if(p>0.55) countUp();
+    countTo(p);
 
     var exact=frameAt(p);
     exact=exact<0?0:exact>N-1?N-1:exact;
@@ -4893,16 +4893,21 @@ window.tomixSendLead = function (lead) {
   addEventListener('resize',function(){ size(); drawn=-1; },{passive:true});
   /* Цифры считаются не на входе в секцию, а когда действительно
      проявляются — иначе зритель видит уже готовый результат.      */
-  var nums=[].slice.call(sec.querySelectorAll('[data-cs]')), counted=false;
-  function countUp(){
-    if(counted) return; counted=true;
+  var nums=[].slice.call(sec.querySelectorAll('[data-cs]'));
+
+  /* Цифры считаются по прокрутке, а не по таймеру. Раньше счёт стартовал
+     по достижении порога и шёл своим ходом: при медленной прокрутке он
+     успевал закончиться, пока блок ещё прозрачный, и человек видел
+     готовые числа. Теперь они набегают ровно по мере того, как блок
+     проявляется, — при любом темпе прокрутки. */
+  function countTo(p){
+    var k=(p-0.56)/0.30;            /* тот же отрезок, что и появление */
+    k = k<0 ? 0 : k>1 ? 1 : k;
+    k = k*(2-k);                    /* к концу счёт замедляется */
     nums.forEach(function(el){
-      var to=parseFloat(el.getAttribute('data-cs'))||0, t0=performance.now();
-      (function step(now){
-        var k=Math.min(1,(now-t0)/1300);
-        el.textContent=Math.round(to*(k*(2-k)));
-        if(k<1) requestAnimationFrame(step);
-      })(t0);
+      var to=parseFloat(el.getAttribute('data-cs'))||0;
+      var v=Math.round(to*k);
+      if(el._shown!==v){ el._shown=v; el.textContent=v; }
     });
   }
 
