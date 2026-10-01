@@ -4790,7 +4790,7 @@ window.tomixSendLead = function (lead) {
 
   var N=60, DIR='caps/';
   var ctx=cv.getContext('2d');
-  var frames=new Array(N), idx=0, drawn=-1, blend=0, drawnBlend=-1, started=false, live=false;
+  var frames=new Array(N), idx=0, drawn=-1, started=false, live=false;
   var dpr=Math.min(devicePixelRatio||1,2);
 
   function size(){
@@ -4813,9 +4813,8 @@ window.tomixSendLead = function (lead) {
     return null;
   }
 
-  /* Кадров всего шесть десятков, и при прокрутке они сменялись скачком.
-     Подмешиваем следующий кадр пропорционально дробной части — движение
-     становится непрерывным без добавления новых картинок. */
+  /* Одна отрисовка на кадр. Подмешивание соседнего кадра давало лёгкое
+     размытие и удваивало работу — на ноутбуке это выливалось в рывки. */
   function put(img, W, H){
     var iw=img.naturalWidth, ih=img.naturalHeight;
     var sc=Math.max(W/iw,H/ih), w=iw*sc, h=ih*sc;
@@ -4830,11 +4829,7 @@ window.tomixSendLead = function (lead) {
     ctx.globalAlpha=1;
     ctx.clearRect(0,0,W,H);
     put(img, W, H);
-    if(blend>0.02 && idx+1<N){
-      var nxt=pick(idx+1);
-      if(nxt && nxt!==img){ ctx.globalAlpha=blend; put(nxt, W, H); ctx.globalAlpha=1; }
-    }
-    drawn=idx; drawnBlend=blend;
+    drawn=idx;
   }
 
   /* раскадровка сценария */
@@ -4861,12 +4856,9 @@ window.tomixSendLead = function (lead) {
 
     countTo(p);
 
-    var exact=frameAt(p);
-    exact=exact<0?0:exact>N-1?N-1:exact;
-    var want=Math.floor(exact), f=exact-want;
-    if(want!==idx || Math.abs(f-blend)>0.05 || drawn!==idx){
-      idx=want; blend=f; draw();
-    }
+    var want=Math.round(frameAt(p));
+    want=want<0?0:want>N-1?N-1:want;
+    if(want!==idx || drawn!==idx){ idx=want; draw(); }
 
   }
   function preload(){
@@ -4919,12 +4911,29 @@ window.tomixSendLead = function (lead) {
     var vh=window.innerHeight||800;
     return r.top < vh*2.4 && r.bottom > -vh*1.2;
   }
-  (function pump(){
-    requestAnimationFrame(pump);
+  /* Раньше здесь крутился бесконечный цикл кадров. Он работал всегда —
+     даже когда секция далеко за экраном, — и вместе со второй такой же
+     сценой постоянно отъедал кадры у прокрутки, отчего она подвисала.
+     Теперь пересчитываем только по событию прокрутки: браузер присылает
+     его не чаще раза на кадр, этого достаточно. */
+  /* Кадровый цикл крутится только пока сцена рядом с экраном. Когда она
+     далеко — переходим на редкие проверки раз в 200 мс. Раньше два таких
+     цикла работали постоянно и отъедали кадры у прокрутки, отчего она
+     подвисала. Событие прокрутки для этого не годится: оно приходит не
+     во всех случаях (программная прокрутка, переход по якорю), и сцена
+     могла замереть. */
+  (function loop(){
     var n=near();
     if(n && !started) preload();
     live=n;
     if(n) tick();
+    /* Следующий шаг назначаем и кадром, и таймером — кто первый. Кадры
+       иногда не выдаются вовсе (фоновая вкладка, экономия энергии), и
+       на одном requestAnimationFrame сцена просто замирала. */
+    var шагСделан=false;
+    function дальше(){ if(шагСделан) return; шагСделан=true; loop(); }
+    requestAnimationFrame(дальше);
+    setTimeout(дальше, n ? 60 : 200);
   })();
 
   /* Загрузка кадров висит на requestAnimationFrame. Если кадры не идут
@@ -4958,7 +4967,7 @@ window.tomixSendLead = function (lead) {
   var ctx = cv.getContext("2d", { alpha: false });
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  var frames = new Array(N), decoded = 0, blend = 0;
+  var frames = new Array(N), decoded = 0;
   var idx = 0, drawnIdx = -1;
   var live = false, started = false;
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -5007,17 +5016,7 @@ window.tomixSendLead = function (lead) {
     ctx.fillRect(0, 0, cw, ch);
     ctx.drawImage(img, x, y, w, h);
 
-    /* Подмешиваем следующий кадр по дробной части прогресса: руки
-       движутся непрерывно, а не переключаются рывками. */
-    if (blend > 0.02 && idx + 1 < N) {
-      var nxt = pick(idx + 1);
-      if (nxt && nxt !== img) {
-        ctx.globalAlpha = blend;
-        ctx.drawImage(nxt, x, (ch - nxt.naturalHeight * (cw / nxt.naturalWidth)) / 2,
-                      cw, nxt.naturalHeight * (cw / nxt.naturalWidth));
-        ctx.globalAlpha = 1;
-      }
-    }
+
 
     /* Блик на кончиках пальцев. Координаты берём в системе кадра,
        поэтому он держится на месте при любом наезде и размере.   */
@@ -5061,11 +5060,8 @@ window.tomixSendLead = function (lead) {
     k = k < 0 ? 0 : k > 1 ? 1 : k;
     sec.style.setProperty("--k", k.toFixed(4));
 
-    var exact = k * (N - 1);
-    var want = Math.floor(exact), f = exact - want;
-    if (want !== idx || Math.abs(f - blend) > 0.05 || drawnIdx !== idx) {
-      idx = want; blend = f; draw();
-    }
+    var want = Math.round(k * (N - 1));
+    if (want !== idx || drawnIdx !== idx) { idx = want; draw(); }
   }
 
   /* Пока не готовы ВСЕ кадры, перемотку не включаем: наполовину
@@ -5109,12 +5105,27 @@ window.tomixSendLead = function (lead) {
     var vh = window.innerHeight || 800;
     return r.top < vh * 2.4 && r.bottom > -vh * 1.2;
   }
-  (function pump() {
-    requestAnimationFrame(pump);
+  /* Раньше здесь крутился бесконечный цикл кадров. Он работал всегда —
+     даже когда секция далеко за экраном, — и вместе со второй такой же
+     сценой постоянно отъедал кадры у прокрутки, отчего она подвисала.
+     Теперь пересчитываем только по событию прокрутки: браузер присылает
+     его не чаще раза на кадр, этого достаточно. */
+  /* Кадровый цикл крутится только пока сцена рядом с экраном. Когда она
+     далеко — переходим на редкие проверки раз в 200 мс. Раньше два таких
+     цикла работали постоянно и отъедали кадры у прокрутки, отчего она
+     подвисала. Событие прокрутки для этого не годится: оно приходит не
+     во всех случаях (программная прокрутка, переход по якорю), и сцена
+     могла замереть. */
+  (function loop() {
     var n = near();
     if (n && !started) preload();
     live = n;
     if (n) tick();
+    /* Следующий шаг назначаем и кадром, и таймером — кто первый. */
+    var шагСделан = false;
+    function дальше() { if (шагСделан) return; шагСделан = true; loop(); }
+    requestAnimationFrame(дальше);
+    setTimeout(дальше, n ? 60 : 200);
   })();
 
   /* Та же страховка, что и в капсуле: без кадров сцена не начинала
