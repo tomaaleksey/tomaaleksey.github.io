@@ -4930,10 +4930,10 @@ window.tomixSendLead = function (lead) {
     /* Следующий шаг назначаем и кадром, и таймером — кто первый. Кадры
        иногда не выдаются вовсе (фоновая вкладка, экономия энергии), и
        на одном requestAnimationFrame сцена просто замирала. */
-    var шагСделан=false;
-    function дальше(){ if(шагСделан) return; шагСделан=true; loop(); }
+    var таймер=0;
+    function дальше(){ if(!таймер) return; clearTimeout(таймер); таймер=0; loop(); }
+    таймер=setTimeout(дальше, n ? 60 : 200);
     requestAnimationFrame(дальше);
-    setTimeout(дальше, n ? 60 : 200);
   })();
 
   /* Загрузка кадров висит на requestAnimationFrame. Если кадры не идут
@@ -5122,10 +5122,10 @@ window.tomixSendLead = function (lead) {
     live = n;
     if (n) tick();
     /* Следующий шаг назначаем и кадром, и таймером — кто первый. */
-    var шагСделан = false;
-    function дальше() { if (шагСделан) return; шагСделан = true; loop(); }
+    var таймер = 0;
+    function дальше() { if (!таймер) return; clearTimeout(таймер); таймер = 0; loop(); }
+    таймер = setTimeout(дальше, n ? 60 : 200);
     requestAnimationFrame(дальше);
-    setTimeout(дальше, n ? 60 : 200);
   })();
 
   /* Та же страховка, что и в капсуле: без кадров сцена не начинала
