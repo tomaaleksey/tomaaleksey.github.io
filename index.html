@@ -4014,6 +4014,12 @@ window.tomixSendLead = function (lead) {
     -------------------------------------------------------------- */
     var data = Object.fromEntries(new FormData(form).entries());
     window.tomixSendLead(data);   /* адрес приёмника — в начале документа */
+
+    /* Цель Яндекс.Метрики. По ней Директ понимает, какой запрос привёл
+       заявку, а какой только потратил деньги. Без неё кампания слепая.
+       Счётчик тот же, что в init внизу страницы. */
+    if (typeof ym === "function") ym(113443266, "reachGoal", "zayavka");
+
     form.style.display = "none";
     okBox.classList.add("is-on");
     showSent();
