@@ -497,7 +497,12 @@ footer a:hover{text-decoration:underline;}
     for (var i = 0; i < 14; i++) {
       (function (сдвиг) {
         var д = new Date(сегодня.getFullYear(), сегодня.getMonth(), сегодня.getDate() + сдвиг);
-        var ISO = д.toISOString().slice(0, 10);
+        /* Ключ даты собираем по местному времени. toISOString() переводит
+           в UTC, и при положительном часовом поясе дата съезжает на день
+           назад — в подтверждении показывалось 20-е вместо выбранного 21-го. */
+        var ISO = д.getFullYear() + '-' +
+                  ('0' + (д.getMonth() + 1)).slice(-2) + '-' +
+                  ('0' + д.getDate()).slice(-2);
         var b = document.createElement('button');
         b.type = 'button';
         b.className = 'день' + (выбор.день === ISO ? ' выбран' : '');
