@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Стоматология «Светлый Бор» — демо онлайн-записи от TOMIX</title>
+<meta name="description" content="Демонстрационная страница стоматологии с работающей онлайн-записью: выбор услуги, врача и свободного времени. Сделано студией TOMIX.">
+<meta name="robots" content="noindex, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Стоматология «Светлый Бор» — демо онлайн-записи">
+<meta property="og:description" content="Как выглядит онлайн-запись на сайте стоматологии: пациент выбирает врача и время сам, подтверждение приходит сразу.">
+<meta property="og:url" content="https://tomix-ai.ru/demo/stomatologiya/">
+<meta property="og:image" content="https://tomix-ai.ru/brand/og-image.png">
+<link rel="icon" href="/favicon.ico">
+<style>
+:root{
+  --фон:#F6F8FB; --карточка:#FFFFFF; --текст:#15202B; --тихий:#5A6779;
+  --рамка:#E3E9F2; --бирюза:#0E9AA7; --бирюза-тёмная:#0A7A85;
+  --тёплый:#FFF8EC; --зелёный:#17A34A; --радиус:16px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; background:var(--фон); color:var(--текст);
+  font:17px/1.65 -apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block;}
+.обёртка{max-width:1060px;margin:0 auto;padding:0 20px;}
+
+/* ——— полоса «это демо» ——— */
+.демо{
+  background:#15202B;color:#fff;font-size:14.5px;line-height:1.5;
+  padding:11px 20px;text-align:center;
+}
+.демо a{color:#7FD4DC;text-decoration:none;border-bottom:1px solid rgba(127,212,220,.4);}
+.демо b{color:#fff;}
+
+/* ——— шапка ——— */
+header{background:var(--карточка);border-bottom:1px solid var(--рамка);position:sticky;top:0;z-index:40;}
+.шапка{display:flex;align-items:center;gap:20px;padding:14px 0;flex-wrap:wrap;}
+.лого{display:flex;align-items:center;gap:11px;margin-right:auto;}
+.знак{
+  width:40px;height:40px;border-radius:11px;flex:none;
+  background:linear-gradient(135deg,var(--бирюза),#4FC3CE);
+  display:grid;place-items:center;
+}
+.лого__имя{font-size:18px;font-weight:700;letter-spacing:-.01em;line-height:1.15;}
+.лого__под{font-size:12.5px;color:var(--тихий);}
+.контакт{font-size:14px;color:var(--тихий);line-height:1.35;}
+.контакт b{display:block;font-size:17px;color:var(--текст);}
+.кнопка{
+  display:inline-block;background:var(--бирюза);color:#fff;border:0;
+  border-radius:11px;padding:13px 22px;font:700 15.5px/1 inherit;
+  cursor:pointer;text-decoration:none;transition:background .15s;
+}
+.кнопка:hover{background:var(--бирюза-тёмная);}
+.кнопка:active{transform:translateY(1px);}
+.кнопка--светлая{background:#fff;color:var(--текст);border:1.5px solid var(--рамка);}
+.кнопка--светлая:hover{background:#F2F5F9;}
+.кнопка[disabled]{opacity:.45;cursor:default;}
+
+/* ——— первый экран ——— */
+.первый{padding:54px 0 44px;}
+.первый h1{
+  font-size:clamp(30px,5vw,46px);line-height:1.1;letter-spacing:-.025em;
+  margin:0 0 16px;max-width:17ch;
+}
+.первый p{font-size:19px;color:var(--тихий);margin:0 0 26px;max-width:52ch;}
+.сетка{display:grid;grid-template-columns:1.05fr .95fr;gap:34px;align-items:start;}
+.плюсы{display:flex;gap:26px;flex-wrap:wrap;margin:28px 0 0;}
+.плюс__ч{font-size:26px;font-weight:700;letter-spacing:-.02em;}
+.плюс__т{font-size:13.5px;color:var(--тихий);}
+
+/* ——— карточка записи ——— */
+.запись{
+  background:var(--карточка);border:1px solid var(--рамка);border-radius:var(--радиус);
+  padding:26px;box-shadow:0 2px 14px rgba(21,32,43,.05);
+}
+.запись h2{font-size:20px;margin:0 0 4px;letter-spacing:-.01em;}
+.запись__под{font-size:14px;color:var(--тихий);margin:0 0 20px;}
+.шаги{display:flex;gap:6px;margin:0 0 20px;}
+.шаг{
+  flex:1;height:4px;border-radius:2px;background:var(--рамка);transition:background .25s;
+}
+.шаг.активен{background:var(--бирюза);}
+.поле{margin:0 0 16px;}
+.поле__имя{
+  display:block;font-size:13px;font-weight:600;color:var(--тихий);
+  text-transform:uppercase;letter-spacing:.04em;margin:0 0 8px;
+}
+.варианты{display:grid;gap:8px;}
+.вариант{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  background:#fff;border:1.5px solid var(--рамка);border-radius:12px;
+  padding:13px 15px;font:inherit;color:inherit;cursor:pointer;transition:all .15s;
+}
+.вариант:hover{border-color:#BFD4DA;background:#FAFCFD;}
+.вариант.выбран{border-color:var(--бирюза);background:#F2FBFC;}
+.вариант__тело{flex:1;min-width:0;}
+.вариант__имя{font-weight:600;font-size:15.5px;}
+.вариант__низ{font-size:13px;color:var(--тихий);margin-top:1px;}
+.вариант__цена{font-weight:700;font-size:15px;white-space:nowrap;}
+.аватар{
+  width:42px;height:42px;border-radius:50%;flex:none;display:grid;place-items:center;
+  font-weight:700;font-size:15px;color:#fff;letter-spacing:.02em;
+}
+.дни{display:flex;gap:8px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:thin;}
+.день{
+  flex:none;width:68px;border:1.5px solid var(--рамка);border-radius:12px;
+  background:#fff;padding:10px 0;text-align:center;cursor:pointer;font:inherit;
+  transition:all .15s;
+}
+.день:hover{border-color:#BFD4DA;}
+.день.выбран{border-color:var(--бирюза);background:#F2FBFC;}
+.день__нед{font-size:11.5px;color:var(--тихий);text-transform:uppercase;letter-spacing:.04em;}
+.день__чис{font-size:19px;font-weight:700;line-height:1.3;}
+.день__мес{font-size:11.5px;color:var(--тихий);}
+.часы{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:8px;}
+.час{
+  border:1.5px solid var(--рамка);border-radius:10px;background:#fff;
+  padding:11px 0;font:600 15px/1 inherit;cursor:pointer;transition:all .15s;
+}
+.час:hover:not([disabled]){border-color:#BFD4DA;}
+.час.выбран{border-color:var(--бирюза);background:var(--бирюза);color:#fff;}
+.час[disabled]{color:#B6C0CD;background:#F7F9FC;cursor:default;text-decoration:line-through;}
+.ввод{
+  width:100%;border:1.5px solid var(--рамка);border-radius:11px;
+  padding:13px 15px;font:16px/1.4 inherit;color:inherit;background:#fff;
+}
+.ввод:focus{outline:none;border-color:var(--бирюза);}
+.ввод.плохо{border-color:#D84B4B;background:#FFF7F7;}
+.ошибка{color:#C23B3B;font-size:13.5px;margin:6px 0 0;display:none;}
+.ошибка.видна{display:block;}
+.низ-формы{display:flex;gap:10px;align-items:center;margin:20px 0 0;}
+.мелко{font-size:12.5px;color:var(--тихий);line-height:1.5;margin:14px 0 0;}
+
+/* ——— экран «записались» ——— */
+.готово{display:none;text-align:center;padding:14px 0 6px;}
+.готово.видно{display:block;}
+.галка{
+  width:62px;height:62px;border-radius:50%;background:#E6F7EC;
+  display:grid;place-items:center;margin:0 auto 16px;
+}
+.готово h3{font-size:21px;margin:0 0 8px;letter-spacing:-.01em;}
+.сводка{
+  background:#F6F8FB;border-radius:12px;padding:16px 18px;margin:18px 0;
+  text-align:left;font-size:15px;
+}
+.сводка div{display:flex;justify-content:space-between;gap:14px;padding:5px 0;}
+.сводка span:first-child{color:var(--тихий);}
+.сводка span:last-child{font-weight:600;text-align:right;}
+.напоминание{
+  background:var(--тёплый);border-left:3px solid #E8A33D;border-radius:0 10px 10px 0;
+  padding:13px 16px;font-size:14.5px;text-align:left;line-height:1.55;
+}
+
+/* ——— секции ——— */
+section{padding:52px 0;}
+.секция-бел{background:var(--карточка);border-top:1px solid var(--рамка);border-bottom:1px solid var(--рамка);}
+h2.титул{font-size:clamp(24px,3.6vw,33px);line-height:1.18;letter-spacing:-.02em;margin:0 0 10px;}
+.титул__под{font-size:17px;color:var(--тихий);margin:0 0 30px;max-width:58ch;}
+.карточки{display:grid;grid-template-columns:repeat(auto-fit,minmax(246px,1fr));gap:18px;}
+.карточка{
+  background:var(--карточка);border:1px solid var(--рамка);border-radius:var(--радиус);padding:22px;
+}
+.секция-бел .карточка{background:var(--фон);}
+.карточка h3{font-size:17.5px;margin:0 0 7px;}
+.карточка p{font-size:15px;color:var(--тихий);margin:0;line-height:1.6;}
+.врач{display:flex;gap:15px;align-items:flex-start;}
+.врач__имя{font-weight:700;font-size:16.5px;line-height:1.3;}
+.врач__спец{font-size:14px;color:var(--бирюза);font-weight:600;margin:2px 0 6px;}
+.врач__опыт{font-size:14px;color:var(--тихий);line-height:1.55;}
+table.цены{width:100%;border-collapse:collapse;font-size:16px;}
+table.цены td{padding:13px 0;border-bottom:1px solid var(--рамка);vertical-align:top;}
+table.цены tr:last-child td{border-bottom:0;}
+table.цены td:last-child{text-align:right;font-weight:700;white-space:nowrap;padding-left:16px;}
+.цены__под{font-size:13.5px;color:var(--тихий);}
+
+/* ——— подвал ——— */
+footer{background:#15202B;color:#AFBBC9;padding:40px 0 46px;font-size:15px;}
+footer a{color:#7FD4DC;text-decoration:none;}
+footer a:hover{text-decoration:underline;}
+.подвал{display:grid;grid-template-columns:1.3fr 1fr;gap:30px;}
+.подвал h4{color:#fff;font-size:16px;margin:0 0 10px;}
+.подвал p{margin:0 0 7px;line-height:1.6;}
+.сноска{
+  margin-top:30px;padding-top:22px;border-top:1px solid rgba(255,255,255,.12);
+  font-size:13.5px;line-height:1.65;
+}
+
+@media (max-width:820px){
+  .сетка{grid-template-columns:1fr;gap:26px;}
+  .подвал{grid-template-columns:1fr;}
+  .первый{padding:38px 0 32px;}
+  section{padding:40px 0;}
+  .контакт{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="демо">
+  Это <b>демонстрационная страница</b>. Клиника «Светлый Бор» придумана — так выглядит онлайн-запись,
+  которую делает <a href="https://tomix-ai.ru/" target="_blank" rel="noopener">TOMIX</a>. Записаться можно по-настоящему, никуда ничего не уйдёт.
+</div>
+
+<header>
+  <div class="обёртка шапка">
+    <div class="лого">
+      <div class="знак" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5.5c-1.8-1.6-4-2-5.6-1-1.8 1-2.6 3.3-2 5.7.4 1.6.6 3 .8 4.6.2 1.8.5 3.7 1.8 4.1 1.2.4 1.9-1 2.4-2.6.4-1.3.9-2.3 2.6-2.3s2.2 1 2.6 2.3c.5 1.6 1.2 3 2.4 2.6 1.3-.4 1.6-2.3 1.8-4.1.2-1.6.4-3 .8-4.6.6-2.4-.2-4.7-2-5.7-1.6-1-3.8-.6-5.6 1Z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="лого__имя">Светлый Бор</div>
+        <div class="лого__под">стоматология · Иваново</div>
+      </div>
+    </div>
+    <div class="контакт">
+      Запись и вопросы
+      <b>+7 (4932) 00-00-00</b>
+    </div>
+    <a href="#zapis" class="кнопка">Записаться онлайн</a>
+  </div>
+</header>
+
+<div class="первый">
+  <div class="обёртка сетка">
+    <div>
+      <h1>Записаться к врачу — в одиннадцать вечера</h1>
+      <p>Выберите услугу, врача и удобное время. Подтверждение придёт сразу, а напоминание — за сутки
+      и за два часа до приёма. Звонить и ждать, пока возьмут трубку, не нужно.</p>
+      <a href="#zapis" class="кнопка">Выбрать время</a>
+      <div class="плюсы">
+        <div><div class="плюс__ч">14</div><div class="плюс__т">лет работаем</div></div>
+        <div><div class="плюс__ч">4,9</div><div class="плюс__т">средняя оценка</div></div>
+        <div><div class="плюс__ч">7</div><div class="плюс__т">врачей в смене</div></div>
+        <div><div class="плюс__ч">КТ</div><div class="плюс__т">свой томограф</div></div>
+      </div>
+    </div>
+
+    <!-- ===================== ЗАПИСЬ ===================== -->
+    <div class="запись" id="zapis">
+      <div id="форма-записи">
+        <h2>Онлайн-запись</h2>
+        <p class="запись__под">Четыре шага, меньше минуты</p>
+
+        <div class="шаги" aria-hidden="true">
+          <div class="шаг активен" data-шаг="1"></div>
+          <div class="шаг" data-шаг="2"></div>
+          <div class="шаг" data-шаг="3"></div>
+          <div class="шаг" data-шаг="4"></div>
+        </div>
+
+        <div class="поле">
+          <span class="поле__имя">Что нужно</span>
+          <div class="варианты" id="услуги"></div>
+        </div>
+
+        <div class="поле" id="блок-врачей" hidden>
+          <span class="поле__имя">Врач</span>
+          <div class="варианты" id="врачи"></div>
+        </div>
+
+        <div class="поле" id="блок-дней" hidden>
+          <span class="поле__имя">Дата</span>
+          <div class="дни" id="дни"></div>
+        </div>
+
+        <div class="поле" id="блок-часов" hidden>
+          <span class="поле__имя">Свободное время</span>
+          <div class="часы" id="часы"></div>
+        </div>
+
+        <div class="поле" id="блок-контактов" hidden>
+          <span class="поле__имя">Как вас зовут и куда позвонить</span>
+          <input class="ввод" id="имя" placeholder="Имя" autocomplete="name" style="margin-bottom:10px">
+          <input class="ввод" id="телефон" placeholder="+7 (___) ___-__-__" inputmode="tel" autocomplete="tel">
+          <p class="ошибка" id="ошибка">Проверьте, пожалуйста, имя и телефон</p>
+        </div>
+
+        <div class="низ-формы" id="блок-кнопки" hidden>
+          <button class="кнопка" id="отправить">Записаться</button>
+        </div>
+
+        <p class="мелко" id="подсказка">Выберите услугу — покажу врачей и свободное время.</p>
+      </div>
+
+      <div class="готово" id="готово">
+        <div class="галка" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#17A34A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m4 12.5 5.2 5L20 6.5"/>
+          </svg>
+        </div>
+        <h3>Вы записаны</h3>
+        <p style="color:var(--тихий);margin:0;font-size:15.5px">Подтверждение отправлено в SMS</p>
+        <div class="сводка" id="сводка"></div>
+        <div class="напоминание">
+          Напомним за сутки до приёма и ещё раз за два часа. Перенести или отменить можно
+          прямо в ответном сообщении — звонить в регистратуру не придётся.
+        </div>
+        <p style="margin:20px 0 0"><button class="кнопка кнопка--светлая" id="заново">Записаться ещё раз</button></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="секция-бел">
+  <div class="обёртка">
+    <h2 class="титул">Врачи</h2>
+    <p class="титул__под">Каждый ведёт свои направления, поэтому при записи вы сразу видите,
+    кто именно вас примет и когда у него свободно.</p>
+    <div class="карточки" id="карточки-врачей"></div>
+  </div>
+</section>
+
+<section>
+  <div class="обёртка сетка">
+    <div>
+      <h2 class="титул">Цены</h2>
+      <p class="титул__под">Полный прайс — 120 позиций. Здесь то, о чём спрашивают чаще всего.</p>
+      <table class="цены">
+        <tr><td>Консультация и план лечения<div class="цены__под">с осмотром и снимком</div></td><td>бесплатно</td></tr>
+        <tr><td>Лечение кариеса<div class="цены__под">включая пломбу</div></td><td>от 4 500 ₽</td></tr>
+        <tr><td>Лечение каналов<div class="цены__под">один канал, под микроскопом</div></td><td>от 6 800 ₽</td></tr>
+        <tr><td>Профессиональная чистка<div class="цены__под">ультразвук и Air Flow</div></td><td>от 5 200 ₽</td></tr>
+        <tr><td>Имплантация<div class="цены__под">имплант, установка, коронка</div></td><td>от 48 000 ₽</td></tr>
+        <tr><td>Компьютерная томография<div class="цены__под">свой томограф, снимок сразу</div></td><td>2 400 ₽</td></tr>
+      </table>
+    </div>
+    <div>
+      <h2 class="титул">Что ещё работает</h2>
+      <p class="титул__под">Онлайн-запись — только видимая часть. За ней стоит то,
+      из-за чего заявки перестают теряться.</p>
+      <div class="карточки" style="grid-template-columns:1fr">
+        <div class="карточка">
+          <h3>Напоминания пациенту</h3>
+          <p>За сутки и за два часа. Перенести можно в ответном сообщении, без звонка.
+          Неявок становится заметно меньше, и окно врача не простаивает.</p>
+        </div>
+        <div class="карточка">
+          <h3>Ассистент в мессенджерах</h3>
+          <p>Отвечает на то, что чаще всего спрашивают по телефону: цены, подготовка к анализам,
+          документы для медкомиссии, график врачей. И записывает — круглосуточно.</p>
+        </div>
+        <div class="карточка">
+          <h3>Все обращения в одном месте</h3>
+          <p>Видно, кто записался, кто спросил и не записался, кто перенёс. Ни одна заявка
+          не теряется, даже если пришла ночью.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="обёртка">
+    <div class="подвал">
+      <div>
+        <h4>Стоматология «Светлый Бор»</h4>
+        <p>Иваново, улица Придуманная, 1</p>
+        <p>Пн–сб 09:00–20:00, вс 10:00–16:00</p>
+        <p>+7 (4932) 00-00-00</p>
+      </div>
+      <div>
+        <h4>Эту страницу сделал TOMIX</h4>
+        <p>Сайты, онлайн-запись и чат-боты для клиник, салонов и гостиниц.</p>
+        <p><a href="https://tomix-ai.ru/" target="_blank" rel="noopener">tomix-ai.ru</a></p>
+        <p><a href="mailto:hello@tomix-ai.ru">hello@tomix-ai.ru</a></p>
+      </div>
+    </div>
+    <div class="сноска">
+      Клиника «Светлый Бор», её врачи, цены и адрес вымышлены. Это демонстрационная страница:
+      она показывает, как для вашей клиники будет работать онлайн-запись. Данные, которые вы
+      вводите в форму, никуда не отправляются и нигде не сохраняются — запись существует
+      только в этой вкладке и исчезнет, когда вы её закроете.
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ——— данные демо ——— */
+  var УСЛУГИ = [
+    { код:'osmotr',  имя:'Консультация и план лечения', низ:'20 минут, со снимком',    цена:'бесплатно' },
+    { код:'karies',  имя:'Лечение кариеса',             низ:'60 минут',                цена:'от 4 500 ₽' },
+    { код:'kanaly',  имя:'Лечение каналов',             низ:'90 минут, под микроскопом',цена:'от 6 800 ₽' },
+    { код:'chistka', имя:'Профессиональная чистка',     низ:'50 минут',                цена:'от 5 200 ₽' },
+    { код:'implant', имя:'Имплантация — консультация',  низ:'40 минут, с томографией', цена:'бесплатно' }
+  ];
+
+  var ВРАЧИ = [
+    { код:'kuz', имя:'Светлана Кузнецова', спец:'Терапевт, эндодонтист', опыт:'В клинике 9 лет. Лечение каналов под микроскопом, сложный кариес.',
+      цвет:'#0E9AA7', услуги:['osmotr','karies','kanaly'] },
+    { код:'ser', имя:'Антон Серебряков',   спец:'Хирург-имплантолог',    опыт:'В клинике 6 лет. Имплантация, удаление, костная пластика.',
+      цвет:'#2F6DB5', услуги:['osmotr','implant'] },
+    { код:'gav', имя:'Марина Гаврилова',   спец:'Гигиенист',             опыт:'В клинике 4 года. Профессиональная чистка, отбеливание, обучение гигиене.',
+      цвет:'#8A5BC4', услуги:['osmotr','chistka'] }
+  ];
+
+  var ВСЕ_ЧАСЫ = ['09:00','10:00','11:00','12:00','13:30','14:30','15:30','16:30','17:30','18:30'];
+  var НЕДЕЛЯ = ['вс','пн','вт','ср','чт','пт','сб'];
+  var МЕСЯЦЫ = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+  var МЕСЯЦЫ_Р = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+
+  var выбор = { услуга:null, врач:null, день:null, час:null };
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* Занятость делаем устойчивой: одна и та же дата у одного врача
+     всегда даёт одну и ту же картину. Иначе при перевыборе даты
+     свободные часы прыгают, и это выглядит как ошибка. */
+  function занято(кодВрача, датаISO, час) {
+    var строка = кодВрача + датаISO + час, сумма = 0;
+    for (var i = 0; i < строка.length; i++) сумма = (сумма * 31 + строка.charCodeAt(i)) % 1000;
+    return сумма % 10 < 4;          /* примерно 40% занято */
+  }
+
+  function инициалы(фио) {
+    var ч = фио.split(' ');
+    return (ч[1] ? ч[1][0] : '') + (ч[0] ? ч[0][0] : '');
+  }
+
+  function шагиДо(n) {
+    document.querySelectorAll('.шаг').forEach(function (э) {
+      э.classList.toggle('активен', Number(э.dataset['шаг']) <= n);
+    });
+  }
+
+  /* ——— услуги ——— */
+  function рисоватьУслуги() {
+    var блок = $('услуги');
+    блок.innerHTML = '';
+    УСЛУГИ.forEach(function (у) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'вариант' + (выбор.услуга === у.код ? ' выбран' : '');
+      b.innerHTML = '<div class="вариант__тело"><div class="вариант__имя"></div>' +
+                    '<div class="вариант__низ"></div></div><div class="вариант__цена"></div>';
+      b.querySelector('.вариант__имя').textContent = у.имя;
+      b.querySelector('.вариант__низ').textContent = у.низ;
+      b.querySelector('.вариант__цена').textContent = у.цена;
+      b.addEventListener('click', function () {
+        выбор.услуга = у.код; выбор.врач = null; выбор.день = null; выбор.час = null;
+        рисоватьУслуги(); рисоватьВрачей();
+        $('блок-врачей').hidden = false;
+        $('блок-дней').hidden = true; $('блок-часов').hidden = true;
+        $('блок-контактов').hidden = true; $('блок-кнопки').hidden = true;
+        $('подсказка').textContent = 'Теперь выберите врача.';
+        шагиДо(1);
+      });
+      блок.appendChild(b);
+    });
+  }
+
+  /* ——— врачи ——— */
+  function рисоватьВрачей() {
+    var блок = $('врачи');
+    блок.innerHTML = '';
+    ВРАЧИ.filter(function (в) { return в.услуги.indexOf(выбор.услуга) > -1; })
+      .forEach(function (в) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'вариант' + (выбор.врач === в.код ? ' выбран' : '');
+        b.innerHTML = '<div class="аватар"></div><div class="вариант__тело">' +
+                      '<div class="вариант__имя"></div><div class="вариант__низ"></div></div>';
+        var а = b.querySelector('.аватар');
+        а.style.background = в.цвет;
+        а.textContent = инициалы(в.имя);
+        b.querySelector('.вариант__имя').textContent = в.имя;
+        b.querySelector('.вариант__низ').textContent = в.спец;
+        b.addEventListener('click', function () {
+          выбор.врач = в.код; выбор.день = null; выбор.час = null;
+          рисоватьВрачей(); рисоватьДни();
+          $('блок-дней').hidden = false;
+          $('блок-часов').hidden = true;
+          $('блок-контактов').hidden = true; $('блок-кнопки').hidden = true;
+          $('подсказка').textContent = 'Выберите день — покажу, что свободно.';
+          шагиДо(2);
+        });
+        блок.appendChild(b);
+      });
+  }
+
+  /* ——— дни ——— */
+  function рисоватьДни() {
+    var блок = $('дни');
+    блок.innerHTML = '';
+    var сегодня = new Date();
+    for (var i = 0; i < 14; i++) {
+      (function (сдвиг) {
+        var д = new Date(сегодня.getFullYear(), сегодня.getMonth(), сегодня.getDate() + сдвиг);
+        var ISO = д.toISOString().slice(0, 10);
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'день' + (выбор.день === ISO ? ' выбран' : '');
+        b.innerHTML = '<div class="день__нед"></div><div class="день__чис"></div><div class="день__мес"></div>';
+        b.querySelector('.день__нед').textContent = сдвиг === 0 ? 'сегодня' : НЕДЕЛЯ[д.getDay()];
+        b.querySelector('.день__чис').textContent = д.getDate();
+        b.querySelector('.день__мес').textContent = МЕСЯЦЫ[д.getMonth()];
+        b.addEventListener('click', function () {
+          выбор.день = ISO; выбор.час = null;
+          рисоватьДни(); рисоватьЧасы();
+          $('блок-часов').hidden = false;
+          $('блок-контактов').hidden = true; $('блок-кнопки').hidden = true;
+          $('подсказка').textContent = 'Перечёркнутое время уже занято.';
+          шагиДо(3);
+        });
+        блок.appendChild(b);
+      })(i);
+    }
+  }
+
+  /* ——— часы ——— */
+  function рисоватьЧасы() {
+    var блок = $('часы');
+    блок.innerHTML = '';
+    var свободных = 0;
+    ВСЕ_ЧАСЫ.forEach(function (ч) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'час' + (выбор.час === ч ? ' выбран' : '');
+      b.textContent = ч;
+      if (занято(выбор.врач, выбор.день, ч)) {
+        b.disabled = true;
+      } else {
+        свободных++;
+        b.addEventListener('click', function () {
+          выбор.час = ч;
+          рисоватьЧасы();
+          $('блок-контактов').hidden = false;
+          $('блок-кнопки').hidden = false;
+          $('подсказка').textContent = 'Остался телефон — на него придёт подтверждение.';
+          шагиДо(4);
+        });
+      }
+      блок.appendChild(b);
+    });
+    if (!свободных) {
+      блок.innerHTML = '<p style="grid-column:1/-1;margin:0;color:var(--тихий);font-size:15px">' +
+                       'В этот день всё занято. Выберите соседнюю дату — обычно рядом есть окна.</p>';
+    }
+  }
+
+  /* ——— телефон ——— */
+  var телефон = $('телефон');
+  телефон.addEventListener('input', function () {
+    var ц = телефон.value.replace(/\D/g, '');
+    if (ц[0] === '8') ц = '7' + ц.slice(1);
+    if (ц[0] !== '7') ц = '7' + ц;
+    ц = ц.slice(0, 11);
+    var out = '+7';
+    if (ц.length > 1) out += ' (' + ц.slice(1, 4);
+    if (ц.length >= 4) out += ')';
+    if (ц.length > 4) out += ' ' + ц.slice(4, 7);
+    if (ц.length > 7) out += '-' + ц.slice(7, 9);
+    if (ц.length > 9) out += '-' + ц.slice(9, 11);
+    телефон.value = out;
+  });
+
+  /* ——— отправка ——— */
+  $('отправить').addEventListener('click', function () {
+    var имя = $('имя'), ошибка = $('ошибка');
+    var имяОк = имя.value.trim().length >= 2;
+    var телОк = телефон.value.replace(/\D/g, '').length === 11;
+    имя.classList.toggle('плохо', !имяОк);
+    телефон.classList.toggle('плохо', !телОк);
+    ошибка.classList.toggle('видна', !(имяОк && телОк));
+    if (!(имяОк && телОк)) return;
+
+    var у = УСЛУГИ.filter(function (x) { return x.код === выбор.услуга; })[0];
+    var в = ВРАЧИ.filter(function (x) { return x.код === выбор.врач; })[0];
+    var д = new Date(выбор.день + 'T00:00:00');
+
+    $('сводка').innerHTML = '';
+    [['Услуга', у.имя],
+     ['Врач', в.имя],
+     ['Когда', д.getDate() + ' ' + МЕСЯЦЫ_Р[д.getMonth()] + ', ' + выбор.час],
+     ['Пациент', имя.value.trim()],
+     ['Телефон', телефон.value]
+    ].forEach(function (пара) {
+      var стр = document.createElement('div');
+      var л = document.createElement('span'); л.textContent = пара[0];
+      var п = document.createElement('span'); п.textContent = пара[1];
+      стр.appendChild(л); стр.appendChild(п);
+      $('сводка').appendChild(стр);
+    });
+
+    $('форма-записи').style.display = 'none';
+    $('готово').classList.add('видно');
+    $('zapis').scrollIntoView({ block: 'center', behavior: 'smooth' });
+  });
+
+  $('заново').addEventListener('click', function () {
+    выбор = { услуга:null, врач:null, день:null, час:null };
+    $('имя').value = ''; телефон.value = '';
+    $('имя').classList.remove('плохо'); телефон.classList.remove('плохо');
+    $('ошибка').classList.remove('видна');
+    ['блок-врачей','блок-дней','блок-часов','блок-контактов','блок-кнопки'].forEach(function (id) {
+      $(id).hidden = true;
+    });
+    $('подсказка').textContent = 'Выберите услугу — покажу врачей и свободное время.';
+    шагиДо(1);
+    рисоватьУслуги();
+    $('готово').classList.remove('видно');
+    $('форма-записи').style.display = '';
+  });
+
+  /* ——— карточки врачей в секции ——— */
+  (function () {
+    var блок = $('карточки-врачей');
+    ВРАЧИ.forEach(function (в) {
+      var к = document.createElement('div');
+      к.className = 'карточка';
+      к.innerHTML = '<div class="врач"><div class="аватар"></div><div>' +
+                    '<div class="врач__имя"></div><div class="врач__спец"></div>' +
+                    '<div class="врач__опыт"></div></div></div>';
+      var а = к.querySelector('.аватар');
+      а.style.background = в.цвет;
+      а.textContent = инициалы(в.имя);
+      к.querySelector('.врач__имя').textContent = в.имя;
+      к.querySelector('.врач__спец').textContent = в.спец;
+      к.querySelector('.врач__опыт').textContent = в.опыт;
+      блок.appendChild(к);
+    });
+  })();
+
+  рисоватьУслуги();
+})();
+</script>
+</body>
+</html>
