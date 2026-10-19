@@ -19,6 +19,9 @@
   --тёплый:#FFF8EC; --зелёный:#17A34A; --радиус:16px;
 }
 *{box-sizing:border-box;}
+/* display:flex у .низ-формы перебивает браузерное [hidden]{display:none},
+   и кнопка «Записаться» показывалась до выбора услуги. */
+[hidden]{display:none !important;}
 html{scroll-behavior:smooth;}
 body{
   margin:0; background:var(--фон); color:var(--текст);
